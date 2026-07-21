@@ -1,3 +1,6 @@
+ccflags-y += -I$(srctree)/drivers/misc/mediatek/connectivity/common/common_main/include
+ccflags-y += -I$(srctree)/drivers/misc/mediatek/connectivity/bt/mt66xx/wmt
+
 ###############################################################################
 # Bluetooth character device driver
 
