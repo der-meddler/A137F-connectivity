@@ -131,7 +131,6 @@ $(info CFG_BUILD_CONNAC2 is [${CFG_BUILD_CONNAC2}])
 
 # Final Direct Targeting - Bypassing root vendor Makefiles
 obj-y += common/
-obj-y += power_throttling/
 obj-y += connfem/
 obj-y += gps/
 obj-y += fmradio/
