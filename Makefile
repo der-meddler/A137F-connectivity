@@ -129,11 +129,14 @@ $(info CFG_FM_CHIP_ID is [${CFG_FM_CHIP_ID}])
 $(info CFG_FM_CHIP is [${CFG_FM_CHIP}])
 $(info CFG_BUILD_CONNAC2 is [${CFG_BUILD_CONNAC2}])
 
-# Final Direct Targeting based on your flat folder layout
+# Final Direct Targeting - Bypassing root vendor Makefiles
 obj-y += common/
 obj-y += power_throttling/
 obj-y += connfem/
-obj-y += wlan/
 obj-y += gps/
 obj-y += fmradio/
-obj-y += bt/
+
+# Point directly to the internal inline driver locations
+obj-y += wlan/adaptor/
+obj-y += wlan/core/gen4m/
+obj-y += bt/mt66xx/wmt/
