@@ -5,10 +5,8 @@ ifeq ($(TARGET_BUILD_VARIANT),)
 TARGET_BUILD_VARIANT := user
 endif
 
-# THIS IS THE MAGIC LINE: It points to the in-tree common folder
 WMT_SRC_FOLDER := $(TOP)/common
 
-# Export these globally so bt/ wlan/ and gps/ Makefiles can use them
 export TOP WMT_SRC_FOLDER TARGET_BUILD_VARIANT
 
 subdir-ccflags-y += -I$(srctree)/
@@ -32,7 +30,7 @@ subdir-ccflags-y += -I$(srctree)/drivers/clk/mediatek/
 subdir-ccflags-y += -I$(srctree)/drivers/pinctrl/mediatek/
 subdir-ccflags-y += -I$(srctree)/drivers/misc/mediatek/power_throttling/
 
-# Platform ID calculations (Required for BT_PLATFORM)
+# Platform ID calculations
 MTK_PLATFORM_ID := $(patsubst CONSYS_%,%,$(subst ",,$(CONFIG_MTK_COMBO_CHIP)))
 
 ifneq (,$(filter $(CONFIG_MTK_COMBO_CHIP), "CONSYS_6885" "CONSYS_6893"))
@@ -45,14 +43,32 @@ export BT_PLATFORM=connac1x
 endif
 
 # =========================================================================
-# Build Targets (Pointing directly to subfolders containing Makefiles)
+# WLAN gen4m Environment Exports (Fixes "Unsupported HIF=!!")
+# =========================================================================
+export CONFIG_MTK_COMBO_WIFI_HIF=axi
+export WLAN_CHIP_ID=$(MTK_PLATFORM_ID)
+export MTK_ANDROID_WMT=y
+export MTK_ANDROID_EMI=y
+export ADAPTOR_OPTS=$(MTK_COMBO_CHIP)
+
+WLAN_IP_SET_1_SERIES := 6765 6761 6885 6893
+WLAN_IP_SET_2_SERIES := 3967 6785
+WLAN_IP_SET_3_SERIES := 6779 6873 6853
+
+ifneq ($(filter $(WLAN_IP_SET_3_SERIES), $(WLAN_CHIP_ID)),)
+export WIFI_IP_SET=3
+else ifneq ($(filter $(WLAN_IP_SET_2_SERIES), $(WLAN_CHIP_ID)),)
+export WIFI_IP_SET=2
+else
+export WIFI_IP_SET=1
+endif
+
+# =========================================================================
+# Build Targets
 # =========================================================================
 obj-$(CONFIG_MTK_COMBO) += common/
 obj-$(CONFIG_MTK_COMBO_BT) += bt/mt66xx/wmt/
-
-# Wi-Fi splits between adaptor and gen4m core
 obj-$(CONFIG_MTK_COMBO_WIFI) += wlan/adaptor/
 obj-$(CONFIG_MTK_COMBO_WIFI) += wlan/core/gen4m/
-
 obj-$(CONFIG_MTK_COMBO_GPS) += gps/
 obj-$(CONFIG_MTK_COMBO_FM) += fmradio/
