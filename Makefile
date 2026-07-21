@@ -12,6 +12,7 @@ subdir-ccflags-y += -I$(srctree)/
 subdir-ccflags-y += -I$(srctree)/drivers/misc/mediatek/connectivity/common
 subdir-ccflags-y += -I$(srctree)/drivers/misc/mediatek/connectivity/common/include
 subdir-ccflags-y += -I$(srctree)/drivers/misc/mediatek/connectivity/common/inc
+subdir-ccflags-y += -I$(srctree)/drivers/misc/mediatek/connectivity/common/common_main/include
 subdir-ccflags-y += -I$(srctree)/drivers/misc/mediatek/base/power/include
 subdir-ccflags-y += -I$(srctree)/drivers/misc/mediatek/clkbuf/src
 subdir-ccflags-y += -I$(srctree)/drivers/misc/mediatek/base/power/include/clkbuf_v1/$(MTK_PLATFORM)
