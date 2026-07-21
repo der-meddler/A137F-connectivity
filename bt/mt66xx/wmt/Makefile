@@ -27,20 +27,24 @@ else
 endif
 
 # ==========================================================
-# HEADER RESOLUTION (The Fix)
+# HEADER RESOLUTION (Prepend $(srctree)/ to all paths)
 # ==========================================================
-# 1. Use the WMT_SRC_FOLDER exported from the top-level makefile
+# Global WMT common paths
 ccflags-y += -I$(WMT_SRC_FOLDER)/common_main/include
 ccflags-y += -I$(WMT_SRC_FOLDER)/common_main/linux/include
 ccflags-y += -I$(WMT_SRC_FOLDER)/common_main/core/include
 ccflags-y += -I$(WMT_SRC_FOLDER)/common_main/osal/include
 
-# 2. Local BT paths (Fixes missing btmtk_dbg_tp_evt_if.h)
-ccflags-y += -I$(src)
-ccflags-y += -I$(src)/inc
-ccflags-y += -I$(src)/..
-ccflags-y += -I$(src)/../inc
-ccflags-y += -I$(src)/../include/btif
+# Local BT subsystem header paths
+ccflags-y += -I$(srctree)/$(src)
+ccflags-y += -I$(srctree)/$(src)/inc
+ccflags-y += -I$(srctree)/$(src)/pub
+ccflags-y += -I$(srctree)/$(src)/..
+ccflags-y += -I$(srctree)/$(src)/../inc
+ccflags-y += -I$(srctree)/$(src)/../pub
+ccflags-y += -I$(srctree)/$(src)/../include/btif
+ccflags-y += -I$(srctree)/drivers/misc/mediatek/connectivity/bt/mt66xx/inc
+ccflags-y += -I$(srctree)/drivers/misc/mediatek/connectivity/bt/inc
 
 # ==========================================================
 # KERNEL MODULE COMPILATION
@@ -51,14 +55,13 @@ else
 MODULE_NAME := bt_drv
 endif
 
-# MUST be obj-y or obj-$(CONFIG_MTK_COMBO_BT) to build into kernel image
 obj-y += $(MODULE_NAME).o
 
 ccflags-y += -D CREATE_NODE_DYNAMIC=1
 ccflags-y += -DCFG_DISABLE_BT_LOG=1
 
 $(MODULE_NAME)-objs += stp_chrdev_bt.o
-$(MODULE_NAME)-objs += btmtk_dbg.o btmtk_dbg_tp_evt_if.o
+$(MODULE_NAME)-objs += btmtk_dbg.o
 
 ifneq ($(CONFIG_MTK_CONNSYS_DEDICATED_LOG_PATH),)
     $(MODULE_NAME)-objs += fw_log_bt.o
