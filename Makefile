@@ -44,9 +44,15 @@ export MTK_COMBO_CHIP=CONNAC
 export BT_PLATFORM=connac1x
 endif
 
-# Build Targets
+# =========================================================================
+# Build Targets (Pointing directly to subfolders containing Makefiles)
+# =========================================================================
 obj-$(CONFIG_MTK_COMBO) += common/
 obj-$(CONFIG_MTK_COMBO_BT) += bt/mt66xx/wmt/
-obj-$(CONFIG_MTK_COMBO_WIFI) += wlan/
+
+# Wi-Fi splits between adaptor and gen4m core
+obj-$(CONFIG_MTK_COMBO_WIFI) += wlan/adaptor/
+obj-$(CONFIG_MTK_COMBO_WIFI) += wlan/core/gen4m/
+
 obj-$(CONFIG_MTK_COMBO_GPS) += gps/
 obj-$(CONFIG_MTK_COMBO_FM) += fmradio/
