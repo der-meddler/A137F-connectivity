@@ -27,13 +27,13 @@ else
 endif
 
 # ==========================================================
-# HEADER RESOLUTION (Prepend $(srctree)/ to all paths)
+# HEADER RESOLUTION
 # ==========================================================
-# Global WMT common paths
 ccflags-y += -I$(WMT_SRC_FOLDER)/common_main/include
 ccflags-y += -I$(WMT_SRC_FOLDER)/common_main/linux/include
 ccflags-y += -I$(WMT_SRC_FOLDER)/common_main/core/include
 ccflags-y += -I$(WMT_SRC_FOLDER)/common_main/osal/include
+ccflags-y += -I$(WMT_SRC_FOLDER)/debug_utility
 
 # Local BT subsystem header paths
 ccflags-y += -I$(srctree)/$(src)
@@ -43,8 +43,6 @@ ccflags-y += -I$(srctree)/$(src)/..
 ccflags-y += -I$(srctree)/$(src)/../inc
 ccflags-y += -I$(srctree)/$(src)/../pub
 ccflags-y += -I$(srctree)/$(src)/../include/btif
-ccflags-y += -I$(srctree)/drivers/misc/mediatek/connectivity/bt/mt66xx/inc
-ccflags-y += -I$(srctree)/drivers/misc/mediatek/connectivity/bt/inc
 
 # ==========================================================
 # KERNEL MODULE COMPILATION
@@ -58,8 +56,11 @@ endif
 obj-y += $(MODULE_NAME).o
 
 ccflags-y += -D CREATE_NODE_DYNAMIC=1
+
+# Disables vendor debug logging that requires missing headers
 ccflags-y += -DCFG_DISABLE_BT_LOG=1
 
+# Object definitions (Only compile in-tree core objects)
 $(MODULE_NAME)-objs += stp_chrdev_bt.o
 $(MODULE_NAME)-objs += btmtk_dbg.o
 
